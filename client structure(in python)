@@ -1,0 +1,23 @@
+import socket
+ 
+client = socket.socket()
+client.connect(('--',9999))
+ 
+client.send("Hi, I'm client1.".encode())
+client.close()
+
+class ChatClient:
+    def __init__(self):
+        pass
+ 
+    def start(self):
+        pass
+ 
+    def _recv(self):
+        pass
+ 
+    def send(self):
+        pass
+ 
+    def stop(self):
+        pass
