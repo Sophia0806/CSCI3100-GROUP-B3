@@ -26,7 +26,8 @@ class player{
  int condition //number to represent status
  int position_x
  int position_y
- // direction
+ int direction_x
+ int direction_y
  int score
 }
 class character{
@@ -43,15 +44,43 @@ class character{
 }
 class weapon{
  char *w_image
- 
+ char *action //effect
+ float speed
+ int ammo
 }
 class skill{
+ string name
+ int type  // #define 
+ int direction_x
+ int direction_y
+ int position_x
+ int position_y
+ string content
+ float cooldown
+ float Max_cooldown
 }
 class object{
 }
 class projectile{
+ char *p_image
+ int team
+ int damage
+ int direction_x
+ int direction_y
+ int duration
+ int speed
+ int knockback
 }
 class area_effect{
+ char *a_image
+ int position_x
+ int position_y
+ float size
+ float duration
+ float time
+ int damage
+ int knockback
+ char *effect
 }
 class chatbox{
 }
