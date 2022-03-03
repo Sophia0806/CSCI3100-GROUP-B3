@@ -24,13 +24,21 @@ class player{
  int team
  string character
  int condition //number to represent status
- 
+ int position_x
+ int position_y
+ // direction
+ int score
 }
 class character{
   char *image
   char *name
+  int team  //team number
   int max_hp
   int hp
+  obj weapon
+  obj skill
+  float speed
+  
 }
 class weapon{
 }
