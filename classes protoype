@@ -46,6 +46,9 @@ class gamemode{
 class map{
  string background  //file name
  string bgm   //file name
+ //function
+ def generate_map()
+ def refresh_map()
 }
 class player{
  int team
@@ -56,6 +59,17 @@ class player{
  int direction_x
  int direction_y
  int score
+ //function
+ def update()
+ def update_position()
+ def update_condition()
+ def update_direction()
+ def update_score()
+ def generate_character()
+ def check_character()
+ def commandt(input)
+ def send_chat()
+ def *interact()
 }
 class character{
   char *image
@@ -68,12 +82,24 @@ class character{
   float speed
   int condition  // use things like #define REST = 1 to define condition
   float knockback_rate
+  //function
+  def initialize()
+  def move(direction)
+  def born()
+  def update()
+  def collide(target, type)
+  def death()
+  def attack()
+  def use_skill()
 }
 class weapon{
  char *w_image
  char *action //effect
  float speed
  int ammo
+ //function
+ def reload()
+ def initialize()
 }
 class skill{
  string name
@@ -85,6 +111,9 @@ class skill{
  string content
  float cooldown
  float Max_cooldown
+ //function
+ def effect()
+ def update()
 }
 class object{
  int position_x
@@ -92,6 +121,10 @@ class object{
  int max_hp
  int hp
  int remaining_time  // whether the character would disappear
+ //function
+ def refresh()
+ def remove()
+ def collide()
 }
 class projectile{
  char *p_image
@@ -102,6 +135,10 @@ class projectile{
  int duration
  int speed
  int knockback
+ //funtions
+ def check_damage()
+ def update()
+ def remove()
 }
 class area_effect{
  char *a_image
@@ -113,9 +150,18 @@ class area_effect{
  int damage
  int knockback
  char *effect
+ //function
+ def check_damage()
+ def update()
+ def remove()
 }
 class chatbox{
  string message
+ //function
+ def open_input_box()
+ def close_input_box()
+ def send_message()
+ def update()
 }
 class message{
  string type
