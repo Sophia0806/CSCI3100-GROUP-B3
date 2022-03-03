@@ -1,0 +1,38 @@
+class user{
+ int id [20]
+ int type
+ char *email
+ char nickname[20]
+ int token
+}
+
+class  accountsystem{
+}
+class gamemode{
+}
+class map{
+}
+class player{
+}
+class character{
+  char *image
+  char *name
+  int max_hp
+  int hp
+}
+class weapon{
+}
+class skill{
+}
+class object{
+}
+class projectile{
+}
+class area_effect{
+}
+class chatbox{
+}
+class message{
+}
+class bubble{
+}
