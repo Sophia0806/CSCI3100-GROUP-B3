@@ -175,4 +175,7 @@ class bubble{
  int type // =0 then the bubble show on the map, =1 then the bubble show on the screen
  string content
  int duration
+ //function
+ def update()
+ def remove()
 }
