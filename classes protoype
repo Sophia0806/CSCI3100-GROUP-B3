@@ -60,6 +60,11 @@ class skill{
  float Max_cooldown
 }
 class object{
+ int position_x
+ int position_y
+ int max_hp
+ int hp
+ int remaining_time  // whether the character would disappear
 }
 class projectile{
  char *p_image
@@ -83,8 +88,18 @@ class area_effect{
  char *effect
 }
 class chatbox{
+ string message
 }
 class message{
+ string type
+ string content
+ int owner  //use user id to distinguish
+ string time // like '00:00/01/01/2022'
 }
 class bubble{
+ int position_x
+ int position_y
+ int type // =0 then the bubble show on the map, =1 then the bubble show on the screen
+ string content
+ int duration
 }
