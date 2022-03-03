@@ -1,3 +1,4 @@
+#把ppt里的class放进来
 class user{
  int id [20]
  int type
