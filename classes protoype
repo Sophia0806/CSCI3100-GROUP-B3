@@ -38,9 +38,12 @@ class character{
   obj weapon
   obj skill
   float speed
-  
+  int condition  // use things like #define REST = 1 to define condition
+  float knockback_rate
 }
 class weapon{
+ char *w_image
+ 
 }
 class skill{
 }
