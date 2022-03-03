@@ -1,18 +1,30 @@
 class user{
  int id [20]
- int type
  char *email
  char nickname[20]
  int token
 }
 
 class  accountsystem{
+ list user_list
+ string email_verify_code
+ list password_list
 }
 class gamemode{
+ int team_amount
+ list players_each_team
+ object rule   //?
+ object map
 }
 class map{
+ string background  //file name
+ string bgm   //file name
 }
 class player{
+ int team
+ string character
+ int condition //number to represent status
+ 
 }
 class character{
   char *image
