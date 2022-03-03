@@ -1,0 +1,37 @@
+import threading,logging,time,random,datetime,socket
+DATEFMT="%H:%M:%S"
+FORMAT = "[%(asctime)s]\t [%(threadName)s,%(thread)d] %(message)s"
+logging.basicConfig(level=logging.INFO,format=FORMAT,datefmt=DATEFMT)
+ 
+class ChatServer:
+    def __init__(self,ip='000.000.000',port=9999): 
+        self.addr = (ip,port)
+        self.sock = socket.socket()
+        self.event = threading.Event()
+ 
+        self.clients = {}#clients
+ 
+    def show_client(self):
+        while not self.event.is_set():
+            if len(self.clients) > 0:
+                logging.info(self.clients)
+                self.event.wait(3)
+ 
+ 
+    def start(self):
+ 
+ 
+    def stop(self):
+ 
+    def _accept(self):
+
+    def _recv(self, f, client):
+ 
+ 
+ 
+cs = ChatServer()
+cs.start()
+
+e = threading.Event()
+def showthreads(e:threading.Event): 
+ 
