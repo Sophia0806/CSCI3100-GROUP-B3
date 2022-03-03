@@ -1,20 +1,47 @@
 class user{
+// variable
  int id [20]
  char *email
  char nickname[20]
  int token
+ //function
+ def signup()
+ def login()
+ def logout()
+ def update()
+ def reset_pw()
+ def reset_nickname()
+ def join_game()
+ def host_game()
 }
 
 class  accountsystem{
+ //variable
  list user_list
  string email_verify_code
  list password_list
+ //function
+ def request_database()
+ def signup_email_verify()
+ def check_login()
+ def send_reset_pw_email()
 }
 class gamemode{
- int team_amount
- list players_each_team
- object rule   //?
- object map
+ //variable
+ int team_amount //default = 2
+ list players  //record the players' id in current game
+ list teams //only has teams[1] and teams[2] to record number in each team
+ int players_each_team
+ int rule   // -- need discussion
+ object map 
+ //function
+ def check_start()
+ def check_join()
+ def update_infor()
+ def check_end()
+ def initialize()
+ def end()
+ def check_collide()
 }
 class map{
  string background  //file name
