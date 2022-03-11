@@ -4,6 +4,7 @@ class user{
  char *email
  char nickname[20]
  int token
+ profile_photo
  //function
  def signup()
  def login()
