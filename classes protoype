@@ -2,6 +2,7 @@ class user{
 // variable
  char id [5]
  char *email
+ char password
  char nickname[20]
  int token
  profile_photo
