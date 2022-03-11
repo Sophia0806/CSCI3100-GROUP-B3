@@ -1,6 +1,6 @@
 class user{
 // variable
- int id [20]
+ char id [5]
  char *email
  char nickname[20]
  int token
