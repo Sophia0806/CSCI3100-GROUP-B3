@@ -7,7 +7,7 @@ class character(pygame.sprite.Sprite):
         #data =
         self._name = name
         self._direction = 0#a number ranging from 0 to 360 indicate the angle
-        self._imagename = data._image #the corresponding image name of college
+        self._imagename = data._imagename #the corresponding image name of college
         self._image = pygame.image.load(self.imagename).convert_alpha()
         self._spd = data._spd #speed
         self._kbrate = data._kbrate#knockbackrate
