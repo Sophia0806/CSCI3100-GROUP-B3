@@ -2,17 +2,28 @@ class player:
     def __init__(self,username):
         self._user = username
         self._character = None #the character currently controlled by the player
-        self._pos = [0,0] #the camera position
+        self._pos = [0,0] #the camera position on the map
         self._score = 0
         
     def command(self,command):
         #receive command
+        if check_character(self):
         #player command (e.g.chat,endgame...)
-        if self._character != None:
-            if self._character._alive:
             #character command (e.g. move,attack...),only able when control an alive character
                 pass
-    
+            
+    def check_character(self):
+        #check whether the player is controlling a character.
+        if self._character != None:
+            if self._character._alive:
+                return True
+        return False
+        
+    def update_position(self,pos):
+        self._pos = pos #x,y
+        if check_character(self):
+            self._character._pos = pos
+        
     def choose_character(self,character):
         self._character = character
         
