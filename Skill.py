@@ -2,6 +2,7 @@ import math
 class skill:
     def __init__(self,name):
         self._name = name
+        #data = 
         self._maxcd = 0
         self._cd = self._maxcd
         self._contents = []#the content that need to be used
@@ -12,4 +13,4 @@ class skill:
             
     def cast(self,pos,direction):
         #run a skill function with the same name in (pos,direction)
-        pass
+        self._cd = self._maxcd

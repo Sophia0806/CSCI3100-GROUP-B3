@@ -1,23 +1,28 @@
 import math
 import pygame
+import basicfunctions
+from abc import ABCMeta
+from abc import abstractmethod
+from pygame.locals import*
 from pygame.transform import*
+
 class character(pygame.sprite.Sprite):
     def __init__(self,name,pos):
         #these value needs to be imported from database
         #data =
         self._name = name
         self._direction = 0#a number ranging from 0 to 360 indicate the angle
-        self._imagename = data._imagename #the corresponding image name of college
-        self._image = pygame.image.load(self.imagename).convert_alpha()
+        self._imagename = data._image #the corresponding image name of college
+        self._image = pygame.image.load(self.imagename).convert_alpha()#the actual image file
+        self._rect = self._image.get_rect()#the rect of image
         self._spd = data._spd #speed
         self._kbrate = data._kbrate#knockbackrate
         self._kb = 1# the knockback amount when collide with other character
         self._alive = True #whether is alive (able to be controled and interacted)
         
-    def born(self,Game):
-        #initialize this on the current map
+    def born(self,Map):
+        #initialize this on the current game
         self._alive = True
-        game.characters.add(self)
         
     @abstractmethod
     def update(self):
@@ -30,15 +35,16 @@ class character(pygame.sprite.Sprite):
         #give a direction and move towards iton the current Map
         angle = direction* math.pi / 180.0
         self._pos[0] += self._spd * math.cos(ang)
-        self._pos[1] -= self._spd  * math.sin(ang)
+        self._pos[1] -= self._spd * math.sin(ang)
     
     def teleport(self,pos)
         #teleport to a position
-        self.pos = pos
+        self._pos = pos
     
     def collide(self,target):
-        #collide with a target, contiues knockback each one until their image do not cover
-        pass
+        #collide with a target, contiuesly knockback each one until their image do not cover each other
+        angle = basicfunctions.get_angle(self,target)
+        self.knockback (angle,10)
     
     def knockback(self,direction,kb_range):
         #knockback
@@ -78,7 +84,7 @@ class character(pygame.sprite.Sprite):
         
 
 class student(character):#the characters controlled by player
-    def __init__(self,team,college):
+    def __init__(self,team,college,player):
         self._team = team
         self._player = player
         self._pos = [0,0]#current position[x,y]
@@ -88,6 +94,16 @@ class student(character):#the characters controlled by player
         self._maxhp = data._hp #max_health
         self._hp = self._maxhp #health
         self._alive = False #whether is alive (able to be controled and interacted)
+    
+    def move(self,direction):
+        #give a direction and move towards iton the current Map
+        angle = direction* math.pi / 180.0
+        self._pos[0] += self._spd * math.cos(ang)
+        self._pos[1] -= self._spd  * math.sin(ang)
+        
+    def teleport(self,pos)
+        #teleport to a position
+        self.pos = pos
         
     def useskill(self,skill):
         #use a skill,including basic attack
@@ -102,6 +118,7 @@ class student(character):#the characters controlled by player
         self._weapon.update()
         self._skill.update()
         rotate(self._image, self._direction)#rotate the image to the correct direction(pygame.transform)
+        self._player.update_position(self._pos)
     
     def death(self):
         #died and teleport to canteen,it will reborn at corresponding canteen later

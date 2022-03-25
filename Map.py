@@ -1,20 +1,44 @@
+import basicfunctions
+
 class game_map:
     def __init__(self,name,gametype):
         self._name = name
         self._type = gametype
         #these value needs to be imported from database
         #data = 
-        self._objects = data.objects
+        self._initial_obj = data.objects
+        #the initial set of objects
         self._characters = pygame.sprite.Group()
         self._objects = pygame.sprite.Group()
         self._items = pygame.sprite.Group()
     
     def generate_objects(self):
+        for i in self._initial_obj:
+            new_obj = game_object(i.name,i.pos)
+            self.addobj(new_obj)
+    
+    def addobj(self,obj):
+        #add objects into the map
+        self._objects.add(obj)
+    
+    def addcharacter(self,c):
+        #add character intp the map
+        self._characters.add(c)
+    
+    def additem(self,i):
+        #add item into the map
+        self._items.add(i)
+    
+    def update(self):
+        self.check_collision()
         for i in self._objects:
-            game_object(i.name,i.pos)
+            i.update()
+        for i in self._characters:
+            i.update()
+        for i in self._items:
+            i.update()        
     
     def display(self):
-        self.check_collision()
         #display background image
         for i in self._characters:
             if i._activate:
@@ -25,4 +49,28 @@ class game_map:
             i.display()
     
     def check_collision(self):
-        #check_collision between characters,objects,and items, the active their collide function if able
+    #check_collision between characters and other characters,objects,and items,and between items and objects
+    #they active their collide function if able
+        for i in self._characters:
+            for j in self._characters:
+                while pygame.sprite.collide_mask(i,j):
+                    i.collide(j)
+                    j.collide(i)
+                
+            for j in self._objects:
+                while pygame.sprite.collide_mask(i,j):
+                    i.collide(j)
+                    j.collide(i)
+                    
+            for j in self._items:
+                while pygame.sprite.collide_mask(i,j):
+                    i.collide(j)
+                    j.collide(i)
+        
+        for i in self._items:               
+            for j in self._objects:
+                f pygame.sprite.collide_mask(i,j):
+                    i.collide(j)
+                    j.collide(i)
+
+                

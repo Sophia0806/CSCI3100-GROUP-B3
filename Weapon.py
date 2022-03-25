@@ -7,12 +7,13 @@ class weapon:
         self._maxcd = 0 #attack cooldown
         self._reloadtime = 0 #time needed for reload
         self._cd = self._maxcd
+        self._reloadcd = self._reloadtime 
     
     def update(self):
         if self._cd > 0:
             self._cd -=1
         if self._ammo == 0:
-            self.reload#autoreload when ammo is 0
+            self.reload() # autoreload when ammo is 0
     
     def attack(self):
         if self._ammo <= 0:
@@ -26,4 +27,9 @@ class weapon:
         
     def reload(self):
         #wait for reload finish
-        self._ammo = self._maxammo
+        if self._reloadcd <= 0:
+            self._ammo = self._maxammo
+            self._reloadcd = self._reloadtime
+            #display the weapon is reloading
+        else:
+            self._reloadcd -= 1

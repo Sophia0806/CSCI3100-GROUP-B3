@@ -1,5 +1,9 @@
 import math
 import pygame
+import basicfunctions
+from abc import ABCMeta
+from abc import abstractmethod
+from pygame.locals import *
 from pygame.transform import*
 
 class game_object(pygame.sprite.Sprite):
@@ -15,6 +19,8 @@ class game_object(pygame.sprite.Sprite):
         self._attribute = data._attribute
         self._imagename = data._image #the corresponding image name of college
         self._image = pygame.image.load(self.imagename).convert_alpha()
+        self._rect = self._image.get_rect()
+        self._kbrate = 0 #knockbackrate = 0 indicates object can not be knockbacked
     
     def update(self):
         if self._duration > 0:
@@ -29,6 +35,11 @@ class game_object(pygame.sprite.Sprite):
         self.hp -= damage
         if self.hp < 0:
             self.death()
+    
+    def collide(self,target):
+        if self._effect != None:
+            #activate the touching effect
+            pass
     
     def remove(self):
         pygame.sprite.kill(self)

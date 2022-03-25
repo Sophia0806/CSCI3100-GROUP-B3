@@ -1,6 +1,10 @@
 import math
 import pygame
+from abc import ABCMeta
+from abc import abstractmethod
+from pygame.locals import *
 from pygame.transform import*
+import basicfunctions
 
 class item(pygame.sprite.Sprite):
     def __init__(self,name,pos):
@@ -10,10 +14,12 @@ class item(pygame.sprite.Sprite):
         #data = 
         self._duration = data._duration #flying time
         self._kb = data._kb#knockback amount
+        self._kbrate = 0 #knockbackrate = 0 indicates items can not be knockbacked
         self._damage = data._damage#attack damage
         self._effect = data._effect#effect on touch
         self._imagename = data._imagename #the corresponding image name of college
         self._image = pygame.image.load(self.imagename).convert_alpha()
+        self._rect = self._image.get_rect()
         self._removal = data._removal#whether remove when collide
     
     def update(self):
@@ -25,6 +31,8 @@ class item(pygame.sprite.Sprite):
         if self._effect != None:
             #activate the touching effect
             pass
+        if self.removal == True:
+                self.remove()
         
     def display(self,Map):
         pass

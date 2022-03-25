@@ -1,4 +1,5 @@
 import pygame
+import basicfunctions
 
 class game:
     def __init__(self,gametype):
@@ -6,13 +7,10 @@ class game:
 
         self._map = None
         self._players = []#players in the game
-        self._teams = {'a':[],'b':[],'n':[]}#a,b is 2 player teams, n is neutral team(npcs,objects...)
+        self._teams = {'a':[],'b':[]}#a,b is 2 player teams
         self._start =False#whether game is started
         #need data
-        #data =
         self._duration = data._duration#the maximum game duration
-        self._objectlist = data._objectlist#all the objects and corresponding position
-        self._canteenlist = data._canteenlist#all the objects and corresponding position
     
     def initialize(self):
         #initialze the contents,then start the game
@@ -41,8 +39,11 @@ class game:
             
     def update(self):
         self._duration -= 1
+        self._map.update()
         self._map.display()
-        #display things in map            
+        #display things in map
         self.check_end()
+        
+        
     
     
