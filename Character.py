@@ -11,7 +11,8 @@ class character(pygame.sprite.Sprite):
         #these value needs to be imported from database
         #data =
         self._name = name
-        self._direction = 0#a number ranging from 0 to 360 indicate the angle
+        self._direction = 0#direction of move a number ranging from 0 to 360 indicate the angle
+        self._facediraction = 0#the direction of its face, may not always equals to direction
         self._imagename = data._image #the corresponding image name of college
         self._image = pygame.image.load(self.imagename).convert_alpha()#the actual image file
         self._rect = self._image.get_rect()#the rect of image
@@ -19,6 +20,7 @@ class character(pygame.sprite.Sprite):
         self._kbrate = data._kbrate#knockbackrate
         self._kb = 1# the knockback amount when collide with other character
         self._alive = True #whether is alive (able to be controled and interacted)
+        self._move = False#indicate whether to move towards its direction
         
     def born(self,Map):
         #initialize this on the current game
@@ -95,6 +97,13 @@ class student(character):#the characters controlled by player
         self._hp = self._maxhp #health
         self._alive = False #whether is alive (able to be controled and interacted)
     
+    def born(self,Map):
+        #initialize this on the current game
+        self._alive = True
+        #reset weapon and skill
+        self._weapon.reset()
+        self._skill.reset()
+    
     def move(self,direction):
         #give a direction and move towards iton the current Map
         angle = direction* math.pi / 180.0
@@ -115,10 +124,13 @@ class student(character):#the characters controlled by player
         #update the data
         if self._hp < 0:
             self.death()
-        self._weapon.update()
-        self._skill.update()
-        rotate(self._image, self._direction)#rotate the image to the correct direction(pygame.transform)
-        self._player.update_position(self._pos)
+        else:
+            if self._move:
+                self.move(self._direction)
+            self._weapon.update()
+            self._skill.update()
+            rotate(self._image, self._direction)#rotate the image to the correct direction(pygame.transform)
+            self._player.update_position(self._pos)
     
     def death(self):
         #died and teleport to canteen,it will reborn at corresponding canteen later
@@ -129,17 +141,17 @@ class cat(character):
     def __init__(self,pos):
         name = 'cat'
         character.__init__(self,name,pos)
-        self.born(Game)
+        self._move = True
     
     def update(self):
         #have chance to change direction randomly
-        self.move(self._direction)
+        if self._move:
+            self.move(self._direction)
 
 class bus(character):
     def __init__(self,pos,Game):
         name = 'bus'
         character.__init__(self,name,pos)
-        self.born(Game)
     
     def update(self):
         #change the direction along the bus line

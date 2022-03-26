@@ -2,12 +2,16 @@ class weapon:
     def __init__(self,name):
         self._name = name
         self._action = None# the corresponding attack type of the weapon
-        self._maxammo = 0
-        self._ammo = self._maxammo #max attack times
+        self._maxammo = 0 #max attack times
         self._maxcd = 0 #attack cooldown
         self._reloadtime = 0 #time needed for reload
+        self.reset()
+    
+    def reset(self):
+        #resetdata
+        self._ammo = self._maxammo 
         self._cd = self._maxcd
-        self._reloadcd = self._reloadtime 
+        self._reloadcd = self._reloadtime
     
     def update(self):
         if self._cd > 0:

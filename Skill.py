@@ -4,8 +4,12 @@ class skill:
         self._name = name
         #data = 
         self._maxcd = 0
-        self._cd = self._maxcd
         self._contents = []#the content that need to be used
+        self.reset()
+    
+    def reset(self):
+        #reset the data
+        self._cd = self._maxcd
     
     def update(self):
         if self._cd > 0:

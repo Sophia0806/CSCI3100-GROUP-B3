@@ -9,6 +9,8 @@ class player:
         #receive command
         if check_alive_character(self):
         #player command (e.g.chat,endgame...)
+            if command == 'up':
+                character.
             #character command (e.g. move,attack...),only able when control an alive character
             pass
             
