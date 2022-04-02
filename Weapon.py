@@ -1,11 +1,15 @@
 class weapon:
     def __init__(self,name):
         self._name = name
-        self._action = None# the corresponding attack type of the weapon
-        self._maxammo = 0 #max attack times
-        self._maxcd = 0 #attack cooldown
-        self._reloadtime = 0 #time needed for reload
-        self.reset()
+        try:
+            data = models.weapon.get(name = self._name)
+            self._action = data.action# the corresponding attack type of the weapon
+            self._maxammo = data.ammo #max attack times
+            self._maxcd = data.cd #attack cooldown
+            self._reloadtime = data.reloadtime #time needed for reload
+            self.reset()
+        except:
+            print('this type of weapon does not exist')
     
     def reset(self):
         #resetdata

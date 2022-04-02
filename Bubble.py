@@ -1,18 +1,23 @@
 import math
 import pygame
 from pygame.transform import*
+
 class bubble(pygame.sprite.Sprite):
     def __init__(self,pos,content_type,content,duration,corresponding):
         self._pos = pos
-        self._type = content_type#text or imagename
+        try:
+            data = models.bubble.get(name = self._name)
+            self._duration = data._duration
+            self._imagename = data._imagename #the corresponding image name of college
+            self._original_image = pygame.image.load(self.imagename).convert_alpha()#the original image file
+            self._image = self._original_image
+            self._corresponding = corresponding
+            self._type = data._type#text or imagename
+        except:
+            print('this type of bubble does not exist')
+        
         self._content = content
-        self._duration = duration
-        self._corresponding = corresponding
         # position corresponding to camera/map/character/objects)
-        if self._type == 'text':
-            pass
-        if self._type == 'image':
-            pass
     
     def update(self):
         if self._duration > 0:

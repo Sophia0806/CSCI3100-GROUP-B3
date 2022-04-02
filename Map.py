@@ -1,12 +1,21 @@
-import basicfunctions
+from Basicfunctions import*
+from Character import*
+from Object import*
+from Item import*
+from Bubble import*
+#this is the server map
+#from . import models
 
 class game_map:
     def __init__(self,name,gametype):
         self._name = name
         self._type = gametype
-        #these value needs to be imported from database
-        #data = 
-        self._initial_obj = data.objects
+        #these value get from database
+        try:
+            data = models.map.get(name = self._name)
+            self._initial_obj = data.objects
+        except:
+            print('this type of map does not exist')
         #the initial set of objects
         self._characters = pygame.sprite.Group()
         self._objects = pygame.sprite.Group()

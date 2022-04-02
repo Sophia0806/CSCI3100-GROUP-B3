@@ -6,6 +6,9 @@ from abc import abstractmethod
 from pygame.locals import*
 from pygame.transform import*
 
+from Weapon import*
+from Skill import*
+
 class character(pygame.sprite.Sprite):
     def __init__(self,name,pos):
         #these value needs to be imported from database
@@ -13,11 +16,17 @@ class character(pygame.sprite.Sprite):
         self._name = name
         self._direction = 0#direction of move a number ranging from 0 to 360 indicate the angle
         self._facediraction = 0#the direction of its face, may not always equals to direction
-        self._imagename = data._image #the corresponding image name of college
-        self._image = pygame.image.load(self.imagename).convert_alpha()#the actual image file
-        self._rect = self._image.get_rect()#the rect of image
-        self._spd = data._spd #speed
-        self._kbrate = data._kbrate#knockbackrate
+        try:
+            data = models.character.get(name = self._name)
+            self._data = data
+            self._imagename = data._imagename #the corresponding image name of college
+            self._original_image = pygame.image.load(self.imagename).convert_alpha()#the original image file
+            self._image = self._original_image
+            self._rect = self._image.get_rect()#the rect of image
+            self._spd = data._spd #speed
+            self._kbrate = data._kbrate#knockbackrate
+        except:
+            print('this type of character does not exist')
         self._kb = 1# the knockback amount when collide with other character
         self._alive = True #whether is alive (able to be controled and interacted)
         self._move = False#indicate whether to move towards its direction
@@ -39,7 +48,7 @@ class character(pygame.sprite.Sprite):
         self._pos[0] += self._spd * math.cos(ang)
         self._pos[1] -= self._spd * math.sin(ang)
     
-    def teleport(self,pos)
+    def teleport(self,pos):
         #teleport to a position
         self._pos = pos
     
@@ -91,11 +100,12 @@ class student(character):#the characters controlled by player
         self._player = player
         self._pos = [0,0]#current position[x,y]
         character.__init__(self,college,pos)
-        self._weapon = data._weapon
-        self._skill = data._skill #a cuple of ('name',cd, maxcd)
-        self._maxhp = data._hp #max_health
+        self._weapon = self._data._weapon
+        self._skill = self._data._skill #a cuple of ('name',cd, maxcd)
+        self._maxhp = self._data._hp #max_health
         self._hp = self._maxhp #health
         self._alive = False #whether is alive (able to be controled and interacted)
+        self._movecommand = [0,0,0,0]#the commands indicate move commands recieved[up,down,left,right\]
     
     def born(self,Map):
         #initialize this on the current game
@@ -103,22 +113,17 @@ class student(character):#the characters controlled by player
         #reset weapon and skill
         self._weapon.reset()
         self._skill.reset()
-    
-    def move(self,direction):
-        #give a direction and move towards iton the current Map
-        angle = direction* math.pi / 180.0
-        self._pos[0] += self._spd * math.cos(ang)
-        self._pos[1] -= self._spd  * math.sin(ang)
-        
-    def teleport(self,pos)
-        #teleport to a position
-        self.pos = pos
         
     def useskill(self,skill):
         #use a skill,including basic attack
         if skill == 'attack':
             if self._weapon.attack == True:#successfully attack
                 skill = self._weapon._action(self._pos,self._direction)
+    
+    def move_direction(self):
+        if self._movecommand != [0,0,0,0]:
+            cmd = self._movecommand
+            self._direction = math.atan((cmd[0]-cmd[1])/(cmd[3]-cmd[2]))
     
     def update(self):
         #update the data
@@ -129,7 +134,8 @@ class student(character):#the characters controlled by player
                 self.move(self._direction)
             self._weapon.update()
             self._skill.update()
-            rotate(self._image, self._direction)#rotate the image to the correct direction(pygame.transform)
+            self._image = pygame.transform.rotate(self._original_image, self._direction)
+            self._rect = self._image.get_rect()
             self._player.update_position(self._pos)
     
     def death(self):

@@ -1,18 +1,23 @@
+
 class player:
-    def __init__(self,username):
+    def __init__(self,userid,username):
+        self._id = userid
         self._user = username
         self._character = None #the character currently controlled by the player
         self._pos = [0,0] #the camera position on the map
         self._score = 0
+        self._ready = False
+        #game could start if there are enogh players and all of them are ready
         
     def command(self,command):
         #receive command
+        if command == 'ready':
+            self._ready = True
         if check_alive_character(self):
         #player command (e.g.chat,endgame...)
             if command == 'up':
-                character.
+                pass
             #character command (e.g. move,attack...),only able when control an alive character
-            pass
             
     def check_alive_character(self):
         #check whether the player is controlling a alive character.

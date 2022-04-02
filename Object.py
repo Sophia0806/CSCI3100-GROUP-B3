@@ -1,6 +1,6 @@
 import math
 import pygame
-import basicfunctions
+from Basicfunctions import*
 from abc import ABCMeta
 from abc import abstractmethod
 from pygame.locals import *
@@ -12,14 +12,18 @@ class game_object(pygame.sprite.Sprite):
         self._pos = pos
         self._team = 'n'
         #these value get from data base
-        #data = 
-        self._maxhp = data._hp#-1 means unbreakable
-        self._hp = self._maxhp
-        self._duration = data._duration#-1 means last forever
-        self._attribute = data._attribute
-        self._imagename = data._image #the corresponding image name of college
-        self._image = pygame.image.load(self.imagename).convert_alpha()
-        self._rect = self._image.get_rect()
+        try:
+            data = models.object.get(name = self._name)
+            self._maxhp = data._hp#-1 means unbreakable
+            self._hp = self._maxhp
+            self._duration = data._duration#-1 means last forever
+            self._attribute = data._attribute
+            self._imagename = data._image #the corresponding image name of college
+            self._original_image = pygame.image.load(self.imagename).convert_alpha()#the original image file
+            self._image = self._original_image
+            self._rect = self._image.get_rect()
+        except:
+            print('this type of object does not exist')
         self._kbrate = 0 #knockbackrate = 0 indicates object can not be knockbacked
     
     def update(self):
