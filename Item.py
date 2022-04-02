@@ -1,0 +1,148 @@
+import math
+import pygame
+from abc import ABCMeta
+from abc import abstractmethod
+from pygame.locals import *
+from pygame.transform import*
+from Basicfunctions import*
+#from . import models
+
+class item(pygame.sprite.Sprite):
+    def __init__(self,name,pos):
+        self._name = name
+        self._pos = pos
+        #these value get from database
+        try:
+            data = models.item.get(name = self._name)
+            self._data = data
+            self._duration = data._duration #flying time
+            self._kb = data._kb#knockback amount
+            self._damage = data._damage#attack damage
+            self._effect = data._effect#effect on touch
+            self._imagename = data._imagename #the corresponding image name of college
+            self._removal = data._removal#whether remove when collide
+            self._kbrate = 0 #knockbackrate = 0 means items can not be knockbacked
+            self._original_image = pygame.image.load(self.imagename).convert_alpha()#the original image file
+            self._image = self._original_image
+            self._rect = self._image.get_rect()
+        except:
+            print('this type of item does not exist')
+        
+    
+    def update(self):
+        self._duration -=1
+        if self._duration <= 0:
+            self._remove
+        
+    def collide(self,target):
+        if self._effect != None:
+            #activate the touching effect
+            pass
+        if self.removal == True:
+                self.remove()
+        
+    def display(self,Map):
+        pass
+        
+    def remove(self):
+        pygame.sprite.kill(self)
+        
+class projectile(item):
+    def __init__(self,name,pos,direction,user):
+        item.__init__(self,name,pos)
+        self._direction = direction
+        self._spd = self._data._spd
+        self._angle = self._direction
+        self._user = user
+        self._team = user._team#the character that shoot this, and its corresponding team
+        #the angle of self._image, as projectile mat spin, it's not always equals to direcrion
+        self._image = pygame.transform.rotate(self._original_image, self._direction)
+        self._rect = self._image.get_rect()
+        #rotate the image to the correct direction,and update the rectangle (pygame.transform)
+        
+    
+    def update(self):
+        self.move()
+        self._image = pygame.transform.rotate(self._original_image, self._direction)
+        self._rect = self._image.get_rect()
+        self._duration -=1
+        if self._duration == 0:
+            self._remove
+    
+    def move(self):
+        angle = self._direction* math.pi / 180.0
+        self._pos[0] += self._spd * math.cos(ang)
+        self._pos[1] -= self._spd  * math.sin(ang)
+    
+    def collide(self,target):
+        if target.team != self.team:
+            target.hurt(self._damage)
+            #knockback the target if able
+            if self._effect != None:
+                #activate the touching effect
+                pass
+            if self.removal == True:
+                self.remove()
+
+class melee(item):
+    def __init__(self,name,pos,direction,user):
+        item.__init__(self,name,pos)
+        self._angle = self._direction
+        self._user = user
+        self._team = user._team#the character that shoot this, and its corresponding team
+        #the angle of self._image, as projectile mat spin, it's not always equals to direcrion
+        self._direction = direction
+        self._spd = self._data.spd
+        self._image = pygame.transform.rotate(self._original_image, self._direction)
+        self._rect = self._image.get_rect()
+        #these value needs to be get from database
+        #data = 
+        self._spd = data._spd
+        self._initial_angle = self._spd*self.duration/2
+        
+    
+    def update(self):
+        self.move()
+        rotate(self._image, self._angle)#rotate the image to the correct direction(pygame.transform)
+        self._duration -=1
+        if self._duration == 0:
+            self._remove
+    
+    def move(self):
+        angle = self._direction* math.pi / 180.0
+        self._pos[0] = self._user.pos[0]
+        self._pos[1] = self._user.pos[1]
+    
+    def collide(self,target):
+        if target.team != self.team:
+            target.hurt(self._damage)
+            #knockback the target if able
+            if self._effect != None:
+                #activate the touching effect
+                pass
+            if self.removal == True:
+                self.remove()
+
+class area_effect(item):
+    def __init__(self,name,pos,user):
+        item.__init__(self,name,pos)
+        self._user = user
+        self._team = user._team#the character that shoot this, and its corresponding team
+        #the angle of self._image, as projectile mat spin, it's not always equals to direcrion
+        self._frequency = 0 #the interval between each trigger.0 indicates never trigger
+    
+    def collide(self,target):
+        if target.team != self.team:
+            target.hurt(self._damage)
+            #knockback the target if able
+            if self._effect != None:
+                #activate the touching effect
+                pass
+            if self.removal == True:
+                self.remove()
+                
+    def move(self):
+        if self._user is not None:
+           self._pos[0] = self._user.pos[0]
+           self._pos[1] = self._user.pos[1]
+        
