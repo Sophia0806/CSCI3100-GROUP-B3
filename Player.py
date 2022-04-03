@@ -1,3 +1,6 @@
+#test
+from Localdata import*
+from Character import*
 
 class player:
     def __init__(self,userid,username):
@@ -7,6 +10,7 @@ class player:
         self._pos = [0,0] #the camera position on the map
         self._score = 0
         self._ready = False
+        self._team = 'n'
         #game could start if there are enogh players and all of them are ready
         
     def command(self,command):
@@ -27,9 +31,15 @@ class player:
         
     def update_position(self,pos):
         self._pos = pos #x,y
+    
+    def choose_team(self,team):
+        if team == 'a' or team == 'b':
+            self._team = team
+        else:
+            print('invalid team')
         
-    def choose_character(self,character):
-        self._character = character
+    def choose_character(self,character_name):
+        self._character = student(character_name,self._team,(Height/2,Width/2))
     
     def delete_character(self):
         self._character = None

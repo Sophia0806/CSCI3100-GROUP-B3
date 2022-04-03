@@ -5,80 +5,83 @@ from Item import*
 from Bubble import*
 #this is the server map
 #from . import models
+#test
+from Localdata import*
 
 class game_map:
     def __init__(self,name,gametype):
-        self._name = name
-        self._type = gametype
+        self.name = name
+        self.type = gametype
         #these value get from database
-        try:
-            data = models.map.get(name = self._name)
-            self._initial_obj = data.objects
-        except:
-            print('this type of map does not exist')
+        
+            #data = models.map.get(name = self.name)
+        data = maplist[self.name]
+        self.initial_obj = data['objects']
+        
         #the initial set of objects
-        self._characters = pygame.sprite.Group()
-        self._objects = pygame.sprite.Group()
-        self._items = pygame.sprite.Group()
+        self.characters = pygame.sprite.Group()
+        self.objects = pygame.sprite.Group()
+        self.items = pygame.sprite.Group()
     
     def generate_objects(self):
-        for i in self._initial_obj:
+        for i in self.initial_obj:
             new_obj = game_object(i.name,i.pos)
             self.addobj(new_obj)
     
     def addobj(self,obj):
         #add objects into the map
-        self._objects.add(obj)
+        self.objects.add(obj)
     
     def addcharacter(self,c):
         #add character intp the map
-        self._characters.add(c)
+        self.characters.add(c)
     
     def additem(self,i):
         #add item into the map
-        self._items.add(i)
+        self.items.add(i)
     
     def update(self):
-        self.check_collision()
-        for i in self._objects:
+        #self.check_collision()
+        for i in self.objects:
             i.update()
-        for i in self._characters:
+        for i in self.characters:
             i.update()
-        for i in self._items:
+        for i in self.items:
             i.update()        
     
     def display(self):
         #display background image
-        for i in self._characters:
-            if i._activate:
-                i.display()
-        for i in self._objects:
-            i.display()            
-        for i in self._items:
-            i.display()
-    
+        for i in self.objects:
+            localscreen.blit(i.image, i.rect)            
+        for i in self.items:
+            localscreen.blit(i.image, i.rect)
+        for i in self.characters:
+            if i.alive:
+                localscreen.blit(i.image, i.rect)
+             
     def check_collision(self):
     #check_collision between characters and other characters,objects,and items,and between items and objects
     #they active their collide function if able
-        for i in self._characters:
-            for j in self._characters:
-                while pygame.sprite.collide_mask(i,j):
-                    i.collide(j)
-                    j.collide(i)
+        for i in self.characters:
                 
-            for j in self._objects:
-                while pygame.sprite.collide_mask(i,j):
+            for j in self.objects:
+                if pygame.sprite.collide_mask(i,j):
                     i.collide(j)
                     j.collide(i)
                     
-            for j in self._items:
-                while pygame.sprite.collide_mask(i,j):
+            for j in self.items:
+                if pygame.sprite.collide_mask(i,j):
+                    i.collide(j)
+                    j.collide(i)
+                    
+            for j in self.characters:
+                if j is not i and pygame.sprite.collide_mask(i,j):
                     i.collide(j)
                     j.collide(i)
         
-        for i in self._items:               
-            for j in self._objects:
-                f pygame.sprite.collide_mask(i,j):
+        for i in self.items:               
+            for j in self.objects:
+                if pygame.sprite.collide_mask(i,j):
                     i.collide(j)
                     j.collide(i)
 

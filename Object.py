@@ -5,15 +5,20 @@ from abc import ABCMeta
 from abc import abstractmethod
 from pygame.locals import *
 from pygame.transform import*
+#test
+import Localdata
+from Localdata import*
 
 class game_object(pygame.sprite.Sprite):
     def __init__(self,name,pos):
+        pygame.sprite.Sprite.__init__(self)
         self._name = name
         self._pos = pos
         self._team = 'n'
         #these value get from data base
         try:
-            data = models.object.get(name = self._name)
+            #data = models.object.get(name = self._name)
+            data = game_object[name]
             self._maxhp = data._hp#-1 means unbreakable
             self._hp = self._maxhp
             self._duration = data._duration#-1 means last forever
@@ -21,7 +26,8 @@ class game_object(pygame.sprite.Sprite):
             self._imagename = data._image #the corresponding image name of college
             self._original_image = pygame.image.load(self.imagename).convert_alpha()#the original image file
             self._image = self._original_image
-            self._rect = self._image.get_rect()
+            self.rect = self._image.get_rect()
+            Localdata.local_game.map.objects.add(self)   
         except:
             print('this type of object does not exist')
         self._kbrate = 0 #knockbackrate = 0 indicates object can not be knockbacked
@@ -46,7 +52,7 @@ class game_object(pygame.sprite.Sprite):
             pass
     
     def remove(self):
-        pygame.sprite.kill(self)
+        pygame.sprite.Sprite.kill(self)
     
     def display(self,Map):
         pass
