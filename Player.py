@@ -25,7 +25,8 @@ class player:
     
     def update():
         '''
-        each get a array(list) of clicked keys from the data base, stored in a list
+        each get a array(list) of clicked keys from the data base(html get the command every 1/30 sec,
+        send to server, and the program will update them in the database)stored in a list
         called commands.
         so as the mouse clicked status and its position, store in mouse_statue = (mouse_status, mouse_pos)
         this function triggers each frame
@@ -44,6 +45,12 @@ class player:
         sub = screen.subsurface(rect)
         for i in self.bubbles:
             sub.blit(i.image, i.rect)
+        string = pygame.image.tostring(sub,"RGB")
+        '''
+        send the string to corrseponding database(player.screen), the server program need send each RGB string 
+        to corresponing client every 1/30 sec, and the html need update the screen showup while receive a new
+        RGB string
+        '''
     
     def mousecommand(self,mouse_status):
         pass
