@@ -18,18 +18,19 @@ def get_angle(a,b):
         else:
             return math.atan(tan)+pi
         
+def get_distance(a,b):
+    return math.sqrt((b.pos[1]-a.pos[1])*(b.pos[1]-a.pos[1]) + (b.pos[0]-a.pos[0])*(b.pos[0]-a.pos[0]))
+
+def defeat_enemy(player):
+    player.add_score(100)
+
+def deal_damage(player,amount):
+    player.add_score(amount)
+
+def heal_ally(player,amount):
+    player.add_score(amount)
     
-        
+def initialize_canteen():
+    area_effect('cantenn_a',None,())
+    area_effect('cantenn_b',None,())
     
-def key_function(key):
-    #only actived when game started(need update)
-    if True: 
-        #using wasd to move up,down,left or right
-        if key == K_w :
-            player.command('up')
-        if key == K_a :
-            player.command('left')
-        if key == K_s :
-            player.command('down')
-        if key == K_d :
-            player.command('right')

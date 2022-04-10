@@ -7,8 +7,7 @@ from pygame.transform import*
 from Weapon import*
 from Skill import*
 #test
-import Localdata
-from Localdata import*
+from Serverdata import*
 
 class character(pygame.sprite.Sprite):
     def __init__(self,name,pos):
@@ -16,10 +15,13 @@ class character(pygame.sprite.Sprite):
         #these value needs to be imported from database
         #data =
         self.name = name
-        self.direction = 0#direction of move a number ranging from 0 to 360 indicate the angle
-        self.facediraction = 0#the direction of its face, may not always equals to direction
+        self.type = 'character'
+        self.direction = 0#direction of face from 0 to 360 indicate the angle
         self.conditions = []#the conditions list of it
-            #data = models.character.get(name = self.name)
+        '''
+        load data from database
+        data = 
+        '''
         data = characterlist[name]
         self.pos =pos
         self.data = data
@@ -32,16 +34,20 @@ class character(pygame.sprite.Sprite):
         self.kbrate = 1#knockbackrate
         self.kb = 1# the knockback amount when collide with other character
         self.alive = True #whether is alive (able to be controled and interacted)
-        self.ismove = False#indicate whether to move towards its direction
-        Localdata.local_game.map.characters.add(self)
+        self.canmove = True#indicate whether to move towards its direction
+        servermap.characters.add(self)
         
     def born(self,Map):
         #initialize this on the current game
         self.alive = True
         
     def update(self):
-        self.image = pygame.transform.rotate(self.originalimage, self.direction)
+        self.canmove = True
         for i in self.conditions:
+            #can't move conditions
+            if i['name'] == 'pause' or i['name'] == 'fridge':
+                self.canmove = False
+            #update the condition
             i['duration'] -=1
             if i['duration'] <= 0:
                 self.conditions.remove(i)
@@ -51,19 +57,26 @@ class character(pygame.sprite.Sprite):
         
     def move(self,movecommand):
         #give a direction and move towards iton the current Map
-        
-        self.pos[0] += self.spd * (movecommand[3]-movecommand[1])
-        self.pos[1] += self.spd * (movecommand[2]-movecommand[0])
-        self.rect.center = self.pos
-        
+        spd = self.spd
+        for i in self.conditions:
+            if i['name'] == 'slow':
+                spd = int(self.spd/2)
+            elif i['name'] == 'accelerated':
+                spd = int(self.spd*1.5)
+            
+        self.pos[0] += spd * (movecommand[3]-movecommand[1])
+        self.pos[1] += spd * (movecommand[2]-movecommand[0])
+        self.rect.center = self.pos        
     
     def teleport(self,pos):
         #teleport to a position
-        self.pos = pos
+        self.pos[0] = pos[0]
+        self.pos[1] = pos[1]
     
     def collide(self,target):
-        #collide with a target, contiuesly knockback each one until their image do not cover each other
-        pass
+        #if collide with a character, knockback target for 50 distance
+        if target.type == 'character':
+            knockback(target,get_angle(target,self),50)
     
     def knockback(self,direction,kbrange):
         #knockback
@@ -72,26 +85,39 @@ class character(pygame.sprite.Sprite):
         self.pos[0] -= kbrange * math.cos(angle)
         self.pos[1] += kbrange * math.sin(angle)
     
-    def hurt(self,damage):
+    def hurt(self,attacker,damage):
         #take damage
         if self.alive == False:
             return
             # dead character won't hur or heal
+        for i in self.conditions:
+            #can't move conditions
+            if i['name'] == 'wys_mecha':
+                damage = int(damage/2)
+            if i['name'] == 'shield' or 'fridge':
+                damage = 0
         self.hp -= damage
         if self.hp < 0:
-            self.death()
+            self.death(attacker)
+            
+        #update the damage calculation
+        deal_damage(attacker,damage)
     
-    def heal(self,healing):
+    def heal(self,healer,healing):
         #receive healing
         if self.alive == False:
             return
             # dead character won't hur or heal
-        self.hp += healing
-        self.hp = math.max(self.hp,self.mhp)
+        self.hp += math.max(self.mhp-self.hp,healing)#if hp >= maxhp, can't be healed
+        
+        #update the healing calculation
+        if healer is not None and healer != self :
+            heal_ally(healer,healing)
             
     def death(self):
         #inactivated from current game
         self.alive = False
+        self.remove()
     
     def addcondition(self,condition):
         #if already has the condition, update the duration, else add a new condition
@@ -103,8 +129,7 @@ class character(pygame.sprite.Sprite):
         
     def remove(self):
         #permantly remove this from the game
-        pygame.sprite.Sprite.kill(self)
-    
+        pygame.sprite.Sprite.kill(self)    
     
     def display(self,Map):
         if self.activated:
@@ -118,6 +143,7 @@ class student(character):#the characters controlled by player
         self.pos = [0,0]#current position[x,y]
         character.__init__(self,college,self.pos)
         
+        self.type = 'student'
         self.weapon = weapon(self.data['weapon'])
         self.skill1 = skill(self.data['skill1'])
         self.skill2 = skill(self.data['skill2'])#a cuple of ('name',cd, maxcd)
@@ -133,6 +159,7 @@ class student(character):#the characters controlled by player
         self.weapon.reset()
         self.skill1.reset()
         self.skill2.reset()
+        name_text(self,self.player.username)
         
     def useskill(self,skill):
         #use a skill,including basic attack
@@ -145,14 +172,24 @@ class student(character):#the characters controlled by player
 
     
     def setdirection(self,direction):
-        self.direction = direction
+        #reverse the face direction if its team b
+        if self.team == 'b':
+            self.direction = -direction+pi
+        else:
+            self.direction = direction
     
     def movetest(self):
-        if self.movecommand != [0,0,0,0]:
-            self.ismove = True
-            self.move(self.movecommand)
-        else:
-            self.ismove = False
+        if self.canmove:
+            #move, and then clear the ,ove commands
+            if self.team == 'b':
+                #reverse the direction if its team b                
+                tmp = self.movecommand[1]
+                self.movecommand[1] = self.movecommand[3]
+                self.movecommand[3] = tmp
+                self.move(self.movecommand)
+            else:
+                self.move(self.movecommand)
+            self.movecommand = [0,0,0,0]
     
     def update(self):
         #update the data
@@ -172,23 +209,37 @@ class student(character):#the characters controlled by player
             if i['duration'] <= 0:
                 self.conditions.remove(i)
     
-    def death(self):
+    def death(self,killer):
         #died and teleport to canteen,it will reborn at corresponding canteen later
         self.alive = False
+        if self.team == 'a':
+            pos = []
+        if self.team == 'b':
+            pos = []
+        self.teleport(pos) 
+        defeat_enemy(killer.player)
         #functions that update scores
 
 class npc(character):
     def __init__(self,name,pos,direction,skill,team):
         character.__init__(self,name,pos)
+        self.type = 'npc'
         self.direction = direction#direction of move a number ranging from 0 to 360 indicate the angle
         self.facediraction = direction#the direction of its face, may not always equals to direction
         self.move = True
+        self.maxduration = self.data['duration']
+        self.seerange = self.data['seerange']
+        self.duration = self.maxduration
         self.skill = skill
         self.team = team
         self.skill.reset()
     
     def update(self):
         #in game, all npc with team will move towards the nearest opponent, updates per second
+        if self.duration > 0:
+            self.duration -= 1
+        if self.hp < 0 or self.duration == 0:
+            self.death()
         if self.move:
             self.move(self.direction)
         if self.skill.cd == 0:

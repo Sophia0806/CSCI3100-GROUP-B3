@@ -16,7 +16,6 @@ class game:
     
     def start(self):
         #initialze the contents,then start the game
-        
         self.map.generate_objects()
         '''
         except:
@@ -60,6 +59,8 @@ class game:
             
     def update(self):
         self.duration -= 1
+        for i in self.players:
+            i.update()
         self.map.update()
         self.map.display()
         #display things in map

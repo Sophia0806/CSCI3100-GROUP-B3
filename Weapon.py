@@ -4,16 +4,18 @@ from Skill import*
 class weapon:
     def __init__(self,name):
         self._name = name
-        try:
-            #data = models.weapon.get(name = self._name)
-            data = weaponlist[name]
-            self._action = skill(data['action'])# the corresponding attack type of the weapon
-            self._maxammo = data['ammo'] #max attack times
-            self._maxcd = data['cd'] #attack cooldown
-            self._reloadtime = data['reloadtime'] #time needed for reload
-            self.reset()
-        except:
-            print('this type of weapon does not exist')
+
+        '''
+        load data from database
+        data = 
+        '''
+        data = weaponlist[name]
+        self._action = skill(data['action'])# the corresponding attack type of the weapon
+        self._maxammo = data['ammo'] #max attack times
+        self._maxcd = data['cd'] #attack cooldown
+        self._reloadtime = data['reloadtime'] #time needed for reload
+        self.reset()
+
     
     def reset(self):
         #resetdata

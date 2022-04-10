@@ -8,8 +8,10 @@ from Localdata import*
 class skill:
     def __init__(self,name):
         self._name = name
-        #these value get from database
-            #data = models.skill.get(name = self._name)
+        '''
+        load data from database
+        data = 
+        '''
         data = skilllist[name]
         self._maxcd = data['cd']
         self.reset()
@@ -29,3 +31,6 @@ class skill:
             function = eval(self._name)
         #skill name is the same as the correspoding function name
             function(user,pos,direction)
+        else:
+            pass
+            #show that the skill is under cooldown
