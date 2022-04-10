@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <title>profile photo</title>
+    <style>
+        dl {
+            text-align: center;
+            margin: 0 auto;
+            width: 450px;
+            background-color: rgba(164, 218, 218, 0.3);
+        }
+        button {
+            background-color: #04AA6D;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+    <br><br><br><br><br>
+    <dl  class="card">
+        <dt><br></dt>
+        <dt>
+            <h2 style="text-align:center;color:rgba(53, 86, 146, 0.767);">
+                upload your profile photo
+            </h2>
+        </dt>
+        <dt><br></dt>
+
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="img" class="btn btn-outline-primary">
+            <input type="submit" value="Submit">
+            <br><br>
+            <a href="/"  ><button type="button">cancel</button></a>
+        </form>
+    </dl>
+    
+    
+    
+
+</body>
+</html>

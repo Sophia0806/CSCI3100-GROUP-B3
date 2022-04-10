@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <title>profile</title>
+    <style>
+        dl {
+            text-align: center;
+            margin: 0 auto;
+            width: 450px;
+            background-color: rgba(164, 218, 218, 0.3);
+        }
+        button {
+            background-color: #04AA6D;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+    <br><br>
+    <dl class="card">
+        <dt><br></dt>
+        <dt><h3>User profile</h3></dt>
+        {% if con_user.profile.image %}
+        <dt><img src="{{ con_user.profile.image.url }}" width="200" class="rounded-circle"> </dt>
+        {% else %}
+        <dt><img src="{% static 'logweb/images/default.jpg' %}" width="200" class="rounded-circle"> </dt>
+        {% endif %}
+        <dt><a href="/change_photo/"><button type="button" class="btn btn-info">upload profile photo</button></a></dt>
+        <dt class="list-group-item">Username: {{ con_user.nickname }}</dt>
+        <dt class="list-group-item">Email: {{ con_user.email}}</dt>
+        <dt class="list-group-item">Current Points: {{ con_user.token}}</dt>
+        
+        <a href="/character/" style="text-decoration:none"><button type="button">Enter the game</button></a>
+        <a href="/password/" style="text-decoration:none";><button type="button">change your password</button></a>
+        <a href="/logout/" style="text-decoration:none"><button type="button">logout</button></a>
+
+    </dl>
+    
+</body>
+</html>
