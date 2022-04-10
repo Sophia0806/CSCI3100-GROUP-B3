@@ -1,0 +1,180 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <title>choose character</title>
+    <style>
+        img:hover{
+            background-color: rgb(178, 236, 217);
+        }
+        button {
+            background-color: #04AA6D;
+            text-align: center;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 80%;
+        }
+        .left {
+            margin-left: 50px;
+            float: left;
+            border-style: solid;
+        }
+ 
+        .right {
+            margin-left: 550px;
+            background: #efefef;
+        }
+        .ctitle{
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            font-size: 30px;
+        }
+        h5 {
+            text-align: center;
+            color:#11553c;
+        }
+    </style>
+    <script type="text/javascript">
+        function change_div(id){
+            document.getElementById('cc').style.display = 'none'
+            document.getElementById('na').style.display = 'none'
+            document.getElementById('uc').style.display = 'none'
+            document.getElementById('shaw').style.display = 'none'
+            document.getElementById('ws').style.display = 'none'
+            document.getElementById('shho').style.display = 'none'
+            document.getElementById('523').style.display = 'none'
+            document.getElementById('cw').style.display = 'none'
+            document.getElementById('mc').style.display = 'none'
+            switch(id){
+                case 'cc':
+                    document.getElementById('cc').style.display = 'block';
+                    break;
+                case 'na':
+                    document.getElementById('na').style.display = 'block';
+                    break;
+                case 'uc':
+                    document.getElementById('uc').style.display = 'block';
+                    break;
+                case 'shaw':
+                    document.getElementById('shaw').style.display = 'block';
+                    break;
+                case 'ws':
+                    document.getElementById('ws').style.display = 'block';
+                    break;
+                case 'shho':
+                    document.getElementById('shho').style.display = 'block';
+                    break;
+                case '523':
+                    document.getElementById('523').style.display = 'block';
+                    break;
+                case 'cw':
+                    document.getElementById('cw').style.display = 'block';
+                    break;
+                case 'mc':
+                    document.getElementById('mc').style.display = 'block';
+                    break;
+                default:
+                    break;
+            }
+        }
+    </script>
+</head>
+<body onload="change_div('')">
+    <h1 style="text-align:center;color:rgba(53, 86, 146, 0.767);font-size: 50px;">
+        choose your character
+    </h1>
+    <br>
+    <table class="left">
+        <tr>
+            <td><a href="#" onclick="change_div('cc')"><img src="{% static 'game/images/chara_cc.png' %}" width="160" alt=""></a><h5>No.1 CC</h5></td>
+            <td><a href="#" onclick="change_div('na')"><img src="{% static 'game/images/chara_na.png' %}" width="160" alt=""></a><h5>No.2 NA</h5></td>
+            <td><a href="#" onclick="change_div('uc')"><img src="{% static 'game/images/chara_uc.png' %}" width="160" alt=""></a><h5>No.3 UC</h5></td>
+        </tr>
+        <tr>
+          <td><a href="#" onclick="change_div('shaw')"><img src="{% static 'game/images/chara_shaw.png' %}" width="160" alt=""></a><h5>No.4 Shaw</h5></td>
+          <td><a href="#" onclick="change_div('ws')"><img src="{% static 'game/images/chara_ws.png' %}" width="160" alt=""></a><h5>No.5 WS</h5></td>
+          <td><a href="#" onclick="change_div('shho')"><img src="{% static 'game/images/chara_shho.png' %}" width="160" alt=""></a><h5>No.6 SHHO</h5></td>
+      </tr>
+      <tr>
+          <td><a href="#" onclick="change_div('523')"><img src="{% static 'game/images/chara_523.png' %}" width="160" alt=""></a><h5>No.7 WYS</h5></td>
+          <td><a href="#" onclick="change_div('cw')"><img src="{% static 'game/images/chara_cw.png' %}" width="160" alt=""></a><h5>No.8 CW</h5></td>
+          <td><a href="#" onclick="change_div('mc')"><img src="{% static 'game/images/chara_mc.png' %}" width="160" alt=""></a><h5>No.9 MC</h5></td>
+      </tr>
+    </table>
+
+    <form action="/character/" method="POST" class="right">
+        <div class="container">
+          {% csrf_token %}
+          <p style="color:#959b99">click on the character image to see the detailed introduction</p>
+          <div id="cc">
+              <p class="ctitle">Chung Chi College</p>
+              <p>The paladin</p>
+              <p>Attack: brandish a gas-filled hammer</p>
+              <p>Skill 1: Church Bell – Knocking the large ancient bell of the church and bubbling the speed of own side.</p>
+              <p>Skill 2: Cult – Recovering the Hp of teammates by casting fried chicken to them.</p>
+          </div>
+          <div id="na">
+              <p class="ctitle">New Asia College</p>
+              <p>The Literati</p>
+              <p>Attack: brandish the brush and cast projectiles</p>
+              <p>Skill 1: College Bell: summon the college bell and pause the around opponent</p>
+              <p>Skill 2: I have the order: become invincible and accelerate a lot</p>
+          </div>
+          <div id="uc">
+              <p class="ctitle">United College</p>
+              <p>The Summoner</p>
+              <p>Attack: Cast U-shaped boomerang</p>
+              <p>Skill 1: Frog pond. Summon a little frog who can jump to the opponent and push it away</p>
+              <p>Skill 2: Lawn. Summon a lawn to slow down the opponent.</p>
+          </div>
+          <div id="shaw">
+              <p class="ctitle">Shaw College</p>
+              <p>The Assassin</p>
+              <p>Attack: brandish a gas-filled hammer whose shape is the sculptor of SHAW</p>
+              <p>Skill 1: Assassin goes underground for a while to escape being attacked.</p>
+              <p>Skill 2: Assassin drags a snake from hair to summon its roommate to help it for a while</p>
+          </div>
+          <div id="ws">
+              <p class="ctitle">Lee Woo Sing College</p>
+              <p>The Adventurer</p>
+              <p>Attack: dembeat with AOE</p>
+              <p>Skill 1: refrigerator. Henshin, invincible and recover slowly.</p>
+              <p>Skill 2: Dessert. Cast a dessert to recover teammates.</p>
+          </div>
+          <div id="shho">
+              <p class="ctitle">S.H.Ho College</p>
+              <p>The Saver</p>
+              <p>Attack: cast pink heart bombs recover teammates and beat opponents</p>
+              <p>Skill 1: Home warmth. The doctor casts hearts that can recover HP</p>
+              <p>Skill 2: Home. Summon a sculptor as a HP spring.</p>
+          </div>
+          <div id="523">
+              <p class="ctitle">Wu Yee Sun College</p>
+              <p>The Tech-Otaku</p>
+              <p>Attack: cast cards</p>
+              <p>Skill 1: Stun opponents with a movie projector</p>
+              <p>Skiil 2: ride Gundam made from lab</p>
+          </div>
+          <div id="cw">
+              <p class="ctitle">CW Chu College</p>
+              <p>The Athlete</p>
+              <p style="color:#959b99">sorry we are still working on it :)</p>
+          </div>
+          <div id="mc">
+              <p class="ctitle">Morningside College</p>
+              <p>The Defender</p>
+              <p style="color:#959b99">sorry we are still working on it :)</p>
+          </div>
+          <input type="text" placeholder="enter character No." name="character" id="">
+          <a href="/game/" style="text-decoration:none"><button type="button">start game</button></a>
+        </div>
+      </form>
+
+</body>
+</html>
