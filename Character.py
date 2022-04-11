@@ -22,7 +22,7 @@ class character(pygame.sprite.Sprite):
         load data from database
         data = 
         '''
-        data = characterlist[name]
+        data = data = models.character.objects.get(key=name)
         self.pos =pos
         self.data = data
         self.imagename = data.image #the corresponding image name of college
@@ -30,7 +30,7 @@ class character(pygame.sprite.Sprite):
         self.image = self.originalimage
         self.rect = self.image.get_rect()#the rect of image
         self.rect.center = self.pos
-        self.spd = data['spd'] #speed
+        self.spd = data.spd #speed
         self.kbrate = 1#knockbackrate
         self.kb = 1# the knockback amount when collide with other character
         self.alive = True #whether is alive (able to be controled and interacted)
@@ -169,10 +169,10 @@ class student(character):#the characters controlled by player
         character.__init__(self,college,self.pos)
         
         self.type = 'student'
-        self.weapon = weapon(self.data['weapon'])
-        self.skill1 = skill(self.data['skill1'])
-        self.skill2 = skill(self.data['skill2'])#a cuple of ('name',cd, maxcd)
-        self.maxhp = self.data['hp'] #maxhealth
+        self.weapon = weapon(self.data.weapon)
+        self.skill1 = skill(self.data.skill1)
+        self.skill2 = skill(self.data.skill2)#a cuple of ('name',cd, maxcd)
+        self.maxhp = self.data.hp #maxhealth
         self.hp = self.maxhp #health
         self.alive = False #whether is alive (able to be controled and interacted)
         self.movecommand = [0,0,0,0]#the commands indicate move commands recieved[up,down,left,right\]
@@ -251,8 +251,8 @@ class npc(character):
         self.direction = direction#direction of move a number ranging from 0 to 360 indicate the angle
         self.facediraction = direction#the direction of its face, may not always equals to direction
         self.move = True
-        self.maxduration = self.data['duration']
-        self.seerange = self.data['seerange']
+        self.maxduration = self.data.duration
+        self.seerange = 600
         self.duration = self.maxduration
         self.skill = skill
         self.team = team

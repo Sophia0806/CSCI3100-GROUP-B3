@@ -14,16 +14,11 @@ class game_object(pygame.sprite.Sprite):
         self.type = 'object'
         self._pos = pos
         self._team = 'n'
-        '''
-        load data from database
-        data = 
-        '''
-        data = game_object[name]
+        data = models.object.objects.get(key=name)
         self._maxhp = data._hp#-1 means unbreakable
         self._hp = self._maxhp
-        self._duration = data._duration#-1 means last forever
-        self._attribute = data._attribute
-        self._imagename = data._image #the corresponding image name of college
+        self._duration = data.duration#-1 means last forever
+        self._imagename = data.image #the corresponding image name of college
         self._original_image = pygame.image.load(self.imagename).convert_alpha()#the original image file
         self._image = self._original_image
         self.rect = self._image.get_rect()  

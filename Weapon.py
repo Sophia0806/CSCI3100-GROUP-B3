@@ -9,11 +9,11 @@ class weapon:
         load data from database
         data = 
         '''
-        data = weaponlist[name]
-        self._action = skill(data['action'])# the corresponding attack type of the weapon
-        self._maxammo = data['ammo'] #max attack times
-        self._maxcd = data['cd'] #attack cooldown
-        self._reloadtime = data['reloadtime'] #time needed for reload
+        data = models.weapon.objects.get(key=name)
+        self._action = skill(data.action)# the corresponding attack type of the weapon
+        self._maxammo = data.ammo #max attack times
+        self._maxcd = data.cd #attack cooldown
+        self._reloadtime = data.reloadtime #time needed for reload
         self.reset()
 
     

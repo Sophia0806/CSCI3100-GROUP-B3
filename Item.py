@@ -22,13 +22,13 @@ class item(pygame.sprite.Sprite):
         load data from database
         data = 
         '''
-        data = itemlist[name]
+        data = models.item.objects.get(key=name)
         self.data = data
-        self.duration = data['duration'] #flying time
-        self.kb = data['kb'] #knockback amount
-        self.damage = data['damage'] #attack damage
-        self.effect = data['effect'] #effect on touch
-        self.imagename = data['imagename']  #the corresponding image name of college
+        self.duration = data.duration #flying time
+        self.kb = data.kb #knockback amount
+        self.damage = data.damage#attack damage
+        self.effect = data.effect #effect on touch
+        self.imagename = data.imagename  #the corresponding image name of college
         self.removal = True#whether remove when collide
         self.kbrate = 0 #knockbackrate = 0 means items can not be knockbacked
         self.original_image = pygame.image.load(self.imagename).convert_alpha()#the original image file
@@ -65,7 +65,7 @@ class projectile(item):
     def __init__(self,name,user,pos,direction):
         item.__init__(self,name,user,pos)
         self.direction = direction
-        self.spd = self.data['spd']
+        self.spd = self.data.spd
         self.angle = self.direction
         self.team = user.team#the character that shoot this, and its corresponding team
         #the angle of self.image, as projectile mat spin, it's not always equals to direcrion
@@ -100,7 +100,7 @@ class melee(item):
         self.team = user.team#the character that shoot this, and its corresponding team
         #the angle of self.image, as projectile mat spin, it's not always equals to direcrion
         self.direction = direction
-        self.spd = self.data['spd']
+        self.spd = self.data.spd
         self.image = pygame.transform.rotate(self.original_image, self.direction)
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
@@ -152,7 +152,7 @@ class area_effect(item):
         item._init__(self,name,user,pos)
         self.team = user.team#the character that shoot this, and its corresponding team
         #the angle of self.image, as projectile mat spin, it's not always equals to direcrion
-        self.frequency = self.data['frequency'] #the interval between each trigger.0 indicates never trigger
+        self.frequency = self.data.frequency #the interval between each trigger.0 indicates never trigger
         self.cd = self.frequency
         
     def update(self):

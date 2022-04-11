@@ -1,22 +1,26 @@
+import random
 from Item import*
 from Localdata import*
 
 def cc_left(user,pos,direction):
-    melee('cc_hammer',user,pos,direction)
+    melee('hammer',user,pos,direction)
     
 def cc_right(user,pos,direction):
-    melee('cc_shield',user,pos,direction)
+    area_effect('bell_aoe',user,pos,direction)
 
 def cc_super(user,pos,direction):
-    area_effect('feast',user,pos,direction)
+    for x in [-350,0,350]:
+        for y  in [-350,0,350]:
+             fpos = [pos[0]+x,pos[1]+y]
+             item('food',user,fpos,0)
 
 def na_left(user,pos,direction):
-    melee('na_pen',user,pos,direction)
-    projectile('na_ink',user,pos,direction-14)
-    projectile('na_ink',user,pos,direction-7)
-    projectile('na_ink',user,pos,direction)
-    projectile('na_ink',user,pos,direction+7)
-    projectile('na_ink',user,pos,direction-14)
+    melee('brush',user,pos,direction)
+    projectile('ink',user,pos,direction-14)
+    projectile('ink',user,pos,direction-7)
+    projectile('ink',user,pos,direction)
+    projectile('ink',user,pos,direction+7)
+    projectile('ink',user,pos,direction-14)
     
 def na_right(user,pos,direction):
     area_effect('clock',user,pos,direction)
@@ -27,41 +31,40 @@ def na_super(user,pos,direction):
     user.add_condition(condition)  
 
 def uc_left(user,pos,direction):
-    projectile('uc',user,pos,direction)
+    projectile('boomerang’',user,pos,direction)
 def uc_right(user,pos,direction):
-    area_effect('uc_grass',user,pos,direction) 
+    projectile('frog',user,pos,direction) 
 def uc_super(user,pos,direction):
-    area_effect('uc_pond',user,pos,direction) 
+    area_effect('grass',user,pos,direction)  
     
 
 def shaw_left(user,pos,direction):
-    melee('shaw_basic',user,pos,direction)
+    melee('womanfoot',user,pos,direction)
     
 def shaw_right(user,pos,direction):
     condition = {'name':'shaw_down','duration':120}
     user.add_condition(condition)
     
 def shaw_super(user,pos,direction):
-    skill = skill('shaw_snake')
-    npc('snake',user,pos,direction,skill,user._team)
-    
+    skill = 'shaw_left'
+    npc('SHAW_snake',user,0,direction,skill,user._team)    
 
 def ws_left(user,pos,direction):
-    area_effect('ws_basic',user,pos,direction)
+    area_effect('wsbeat',user,pos,direction)
     
 def ws_right(user,pos,direction):
     condition = {'name':'fridge','duration':60}
     user.add_condition(condition)
     
 def ws_super(user,pos,direction):
-    projectile('ws_super',user,pos,direction)
+    projectile('dessertbullet',user,pos,direction)
     #when it lands, generate a ice-cream that give buff whenpick
 
 def wys_left(user,pos,direction):
-    projectile('wys_basic',user,pos,direction)
+    projectile('card',user,pos,direction)
 
 def wys_right(user,pos,direction):
-    area_effect('wys_super',user,pos,direction)
+    area_effect('wys_movie',user,pos,direction)
     
 def wys_super(user,pos,direction):
     user.hp = user.maxhp*2
@@ -69,15 +72,24 @@ def wys_super(user,pos,direction):
     user.add_condition(condition)   
 
 def shho_left(user,pos,direction):
-    projectile('shho_basic',user,pos,direction)
+    projectile('heartbullet',user,pos,direction)
     #when it lands, generate a heart that heals whenpick
     
 def shho_right(user,pos,direction):
-    area_effect('shho_right',user,pos,direction)
+    for x in [-200,0,200]:
+        for y  in [-200,0,200]:
+             fpos = [pos[0]+x,pos[1]+y]
+             item('heart',user,fpos,0)
 
 def shho_super(user,pos,direction):
-    area_effect('shho_can',user,pos,user.team)
-    
+    npc('SHHO_sculpture',user,pos,0,'sculpture_heart',user._team)
+
+def sculpture_heart(user,pos,direction):
+    rset = [-200,200]
+    x = random.choice(rset)
+    y = random.choice(rset)
+    fpos = [pos[0]+x,pos[1]+y]
+    item('heart',user,fpos,0)
 
 def mc_left(user,pos,direction):
     melee('moring_star',user,pos,direction)

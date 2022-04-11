@@ -8,12 +8,9 @@ from Localdata import*
 class skill:
     def __init__(self,name):
         self._name = name
-        '''
-        load data from database
-        data = 
-        '''
-        data = skilllist[name]
-        self._maxcd = data['cd']
+
+        data = models.skill.objects.get(key=name)
+        self._maxcd = data.cd
         self.reset()
     
     def reset(self):

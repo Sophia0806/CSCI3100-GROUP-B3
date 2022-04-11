@@ -10,11 +10,9 @@ class game_map:
     def __init__(self,name,gametype):
         self.name = name
         self.type = gametype
-        '''
-        load data from database
-        data = 
+
+        data = models.map.objects.get(key=name) 
         self.initial_obj = data.objects
-        '''
         
         #the initial set of objects
         self.characters = pygame.sprite.Group()

@@ -5,22 +5,21 @@ from Map import*
 class game:
     def __init__(self,gametype):
         self.type = gametype
-        self.map = game_map('test',gametype)
+        '''
+        load data from database
+        self.map =
+        Serverdata.servermap = self.map
+        '''
         self.players = []#players in the game
-        self.minplayers = 0 #minmum players to start
-        self.maxplayers = 10 #maxmum players to join
-        self.teams = {'a':[],'b':[]}#a,b is 2 player teams
+        self.playerids = []#players in the game
+        self.teams = {'a':[],'b':[],'n':[]}#a,b is 2 player teams,n is neutral(not used, noly for debug)
         self._start =False#whether game is started
         #need data
-        self.duration = 100000#the maximum game duration,countdown
+        self.duration = 1200#the maximum game duration(sec),countdown
     
     def start(self):
         #initialze the contents,then start the game
         self.map.generate_objects()
-        '''
-        except:
-            print('error in generating map objects')
-        '''
         self.start = True
         
     def end(self):
@@ -34,11 +33,16 @@ class game:
                print('player already joined the game')
         else:
             self.players.append(player)
+            self.playerids.append(player.id)
+            self.teams[i._team].append(player)
         
     def player_leave(self,player):
         for i in self.players:
             if i.id == player.id:
                self.players.remove(i)
+               self.playerids.remove(i.id)
+               self.teams[i._team].remove(i)
+               i.end_game()
         else:
             print('player is not in the game')
     
@@ -58,13 +62,30 @@ class game:
         return False
             
     def update(self):
-        self.duration -= 1
+        self.map.update()
+    
+    def big_update(self):
+        '''
+        get the list of current players in the database
+        playerlist = []
+        '''
+        #check players in database, add new players, and remove left players
+        for i in playerlist:
+            if i.id not in self.playerids:
+                self.player_join(i.id,i.username)
+        for i in self.players:
+            player_exist = False
+            for j in playerlist:
+                if i.id == j.id:
+                    player_exist = True
+            if player_exist = False:
+                self.player_leave(i)
+                
         for i in self.players:
             i.update()
-        self.map.update()
-        self.map.display()
-        #display things in map
+        self.duration -= 1
         self.check_end()
-        
+    
+
     
     
