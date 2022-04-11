@@ -22,7 +22,9 @@ def na_right(user,pos,direction):
     area_effect('clock',user,pos,direction)
 
 def na_super(user,pos,direction):
-    area_effect('shield',user,pos,direction)   
+    user.hp = user.mhp
+    condition = {'name':'na_super','duration':180}
+    user.add_condition(condition)  
 
 def uc_left(user,pos,direction):
     projectile('uc',user,pos,direction)
@@ -36,7 +38,7 @@ def shaw_left(user,pos,direction):
     melee('shaw_basic',user,pos,direction)
     
 def shaw_right(user,pos,direction):
-    condition = {'name':'down','duration':600}
+    condition = {'name':'shaw_down','duration':120}
     user.add_condition(condition)
     
 def shaw_super(user,pos,direction):
@@ -45,10 +47,12 @@ def shaw_super(user,pos,direction):
     
 
 def ws_left(user,pos,direction):
-    area_effect('ws_basic',user,pos,direction) 
+    area_effect('ws_basic',user,pos,direction)
+    
 def ws_right(user,pos,direction):
     condition = {'name':'fridge','duration':60}
     user.add_condition(condition)
+    
 def ws_super(user,pos,direction):
     projectile('ws_super',user,pos,direction)
     #when it lands, generate a ice-cream that give buff whenpick
@@ -57,7 +61,7 @@ def wys_left(user,pos,direction):
     projectile('wys_basic',user,pos,direction)
 
 def wys_right(user,pos,direction):
-    area_effect('wys_right',user,pos,direction)
+    area_effect('wys_super',user,pos,direction)
     
 def wys_super(user,pos,direction):
     user.hp = user.maxhp*2

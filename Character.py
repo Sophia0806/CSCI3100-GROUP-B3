@@ -25,7 +25,7 @@ class character(pygame.sprite.Sprite):
         data = characterlist[name]
         self.pos =pos
         self.data = data
-        self.imagename = 'image/testman.png' #the corresponding image name of college
+        self.imagename = data.image #the corresponding image name of college
         self.originalimage = pygame.image.load(self.imagename).convert_alpha()#the original image file
         self.image = self.originalimage
         self.rect = self.image.get_rect()#the rect of image
@@ -35,6 +35,7 @@ class character(pygame.sprite.Sprite):
         self.kb = 1# the knockback amount when collide with other character
         self.alive = True #whether is alive (able to be controled and interacted)
         self.canmove = True#indicate whether to move towards its direction
+        self.canattack = True#indicate whether to move towards its direction
         servermap.characters.add(self)
         
     def born(self,Map):
@@ -43,14 +44,37 @@ class character(pygame.sprite.Sprite):
         
     def update(self):
         self.canmove = True
+        self.canattack = True
         for i in self.conditions:
-            #can't move conditions
+            if i['name'] == 'fridge':
+                i.hp+=2 #heal 2hp per 1/30 sec
             if i['name'] == 'pause' or i['name'] == 'fridge':
+                #can't move and attack conditions
                 self.canmove = False
+                self.canattack = False   
+            if i['name'] == 'shaw_down' or i['name'] == 'na_super':
+                #can't attack conditions
+                self.canattack = False
+            if i['name'] == 'shaw_down'or i['name'] == 'na_super'or i['name'] == 'fridge'or i['name'] == 'wys_super':
+                #at these conditions, character have new image
+                self.imagename = self.imagename.rstirp('.png')
+                self.imagename += '_1.png'
+                self.originalimage = pygame.image.load(self.imagename).convert_alpha()
+                self.image = self.originalimage
+                self.rect = self.image.get_rect()#the rect of image
+                self.rect.center = self.pos
+                
             #update the condition
             i['duration'] -=1
             if i['duration'] <= 0:
                 self.conditions.remove(i)
+                if i['name'] == 'shaw_down'or i['name'] == 'na_super'or i['name'] == 'fridge'or i['name'] == 'wys_super':
+                    self.imagename = self.imagename.rstirp('_1.png')
+                    self.imagename += '.png'
+                    self.originalimage = pygame.image.load(self.imagename).convert_alpha()#the original image file
+                    self.image = self.originalimage
+                    self.rect = self.image.get_rect()#the rect of image
+                    self.rect.center = self.pos
     
     def direction(self,direction):#change the face direction
         self.direction = direction
@@ -61,7 +85,7 @@ class character(pygame.sprite.Sprite):
         for i in self.conditions:
             if i['name'] == 'slow':
                 spd = int(self.spd/2)
-            elif i['name'] == 'accelerated':
+            elif i['name'] == 'accelerated' or i['name'] == 'wys_spuer' or i['name'] == 'shaw_down'or i['name'] == 'na_super':
                 spd = int(self.spd*1.5)
             
         self.pos[0] += spd * (movecommand[3]-movecommand[1])
@@ -92,9 +116,7 @@ class character(pygame.sprite.Sprite):
             # dead character won't hur or heal
         for i in self.conditions:
             #can't move conditions
-            if i['name'] == 'wys_mecha':
-                damage = int(damage/2)
-            if i['name'] == 'shield' or 'fridge':
+            if i['name'] == 'na_super' or 'fridge' or 'shaw_down':
                 damage = 0
         self.hp -= damage
         if self.hp < 0:
@@ -122,6 +144,9 @@ class character(pygame.sprite.Sprite):
     def addcondition(self,condition):
         #if already has the condition, update the duration, else add a new condition
         for i in self.conditions:
+            if i['name'] == 'shaw_down' or i['name'] == 'na_super',i['name'] == 'fridge':
+                #at these conditions, character are immue
+                return
             if i['name'] == condition['name']:
                 i['duration'] = Math.max(i['duration'],condition['duration'])
                 return
