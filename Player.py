@@ -45,6 +45,8 @@ class player:
         sub = screen.subsurface(rect)
         for i in self.bubbles:
             sub.blit(i.image, i.rect)
+        if self.team == 'b':
+            sub = pygame.transform.flip(sub, True, False)
         string = pygame.image.tostring(sub,"RGB")
         '''
         send the string to corrseponding database(player.screen), the server program need send each RGB string 

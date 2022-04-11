@@ -225,7 +225,6 @@ class student(character):#the characters controlled by player
             self.weapon.update()
             self.skill1.update()
             self.skill2.update()
-            self.image = pygame.transform.rotate(self.originalimage, self.direction)
             self.rect = self.image.get_rect()
             self.rect.center = self.pos
         #update conditions
@@ -258,6 +257,8 @@ class npc(character):
         self.skill = skill
         self.team = team
         self.skill.reset()
+        self.maxcd = 30
+        self.cd = self.maxcd
     
     def update(self):
         #in game, all npc with team will move towards the nearest opponent, updates per second
@@ -265,13 +266,22 @@ class npc(character):
             self.duration -= 1
         if self.hp < 0 or self.duration == 0:
             self.death()
+            return
         if self.move:
             self.move(self.direction)
-        if self.skill.cd == 0:
-            self.skill
+        if self.cd == 0:
+            self.useskill()
+            self.cd = self.maxcd
+        else:
+            self.cd -= 1
         if self.move:
             self.move(self.direction)
-        
+        self.rect = self.image.get_rect()
+        self.rect.center = self.pos
+    
+    def useskill(self):
+        function = eval(self.skill)
+        function(user,pos,direction)
 
 class bus(character):
     def __init__(self,pos,Game):
