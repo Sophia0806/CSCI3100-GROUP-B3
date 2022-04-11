@@ -47,7 +47,7 @@ class item(pygame.sprite.Sprite):
         if target.team != self.team:
             target.hurt(self.damage,self.user)
             
-        if self.effect != None:
+        if self.effect != None and target.type == 'character':
             #activate the touching effect
             function = eval(self.effect)
             function(self,target)
@@ -173,7 +173,7 @@ class area_effect(item):
         if target.team != self.team:
             target.hurt(self.damage,self.user)
             
-        if self.effect != None:
+        if self.effect != None and target.type == 'character':
             #activate the touching effect
             function = eval(self.effect)
             function(self,target)
