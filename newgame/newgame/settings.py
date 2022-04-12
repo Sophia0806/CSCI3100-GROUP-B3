@@ -84,7 +84,7 @@ DATABASES = {
         #'ENGINE': 'mysql.connector.django',
         'NAME': 'newgame',
         'USER': 'root',
-        'PASSWORD': 'cuhk2019',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306',
         
